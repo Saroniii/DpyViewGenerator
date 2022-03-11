@@ -1,1 +1,0 @@
--e git+https://github.com/Pycord-Development/pycord.git@master#egg=py-cord
