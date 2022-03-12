@@ -1,10 +1,9 @@
 import asyncio
-from abc import ABCMeta
-from typing import List, Optional, Callable
+from typing import List, Optional
 
 import discord
-from discord import Interaction, InputTextStyle
-from discord.ui import Modal as BaseModal, InputText as BaseInputText, View
+from discord import Interaction, TextStyle
+from discord.ui import Modal as BaseModal, TextInput as BaseTextInput, View
 
 
 class Modal(BaseModal):
@@ -30,7 +29,7 @@ class Modal(BaseModal):
         self.message = message
         self.parent_view = None
 
-    def _add_components(self, components: List[BaseInputText]):
+    def _add_components(self, components: List[BaseTextInput]):
         """
         モーダルウィンドウにコンポーネントを追加する
         Args:
@@ -40,7 +39,7 @@ class Modal(BaseModal):
             self.add_item(component)
         return self
 
-    def add_component(self, component: BaseInputText):
+    def add_component(self, component: BaseTextInput):
         """
         モーダルウィンドウにコンポーネントを追加する
         Args:
@@ -49,7 +48,7 @@ class Modal(BaseModal):
         self._add_components([component])
         return self
 
-    def add_components(self, components: List[BaseInputText]):
+    def add_components(self, components: List[BaseTextInput]):
         """
         モーダルウィンドウにコンポーネントを追加する
         Args:
@@ -58,7 +57,7 @@ class Modal(BaseModal):
         self._add_components(components)
         return self
 
-    def on_submit(self, func: callable):
+    def on_modal_submit(self, func: callable):
         """
         モーダルウィンドウが閉じられたときに呼ばれる関数を設定する
         Args:
@@ -103,7 +102,7 @@ class Modal(BaseModal):
         self.used = used
         return self
 
-    async def callback(self, interaction: Interaction):
+    async def on_submit(self, interaction: Interaction):
         """
         モーダルウィンドウが閉じられたときに呼ばれる関数を実行する
         Args:
@@ -134,13 +133,12 @@ class Modal(BaseModal):
         return self
 
 
-class InputText(BaseInputText, metaclass=ABCMeta):
+class TextInput(BaseTextInput):
 
     def __init__(self,
                  title: str = None,
                  func: callable = None,
-                 style: InputTextStyle = InputTextStyle.short,
-                 value: str = None,
+                 style: TextStyle = TextStyle.short,
                  label: Optional[str] = "Input",
                  placeholder: Optional[str] = None,
                  min_length: Optional[int] = None,
@@ -150,12 +148,11 @@ class InputText(BaseInputText, metaclass=ABCMeta):
                  parent_view: Optional[View] = None
                  ):
         """
-        入力値を受け取るInputTextを作成する
+        入力値を受け取るTextInputを作成する
         Args:
             title: タイトル
             func: 入力値を受け取る関数
             style: 入力値のスタイル
-            value: 入力値
             label: 入力値のラベル
             placeholder: 入力値のプレースホルダー
             min_length: 最小文字数
@@ -163,12 +160,11 @@ class InputText(BaseInputText, metaclass=ABCMeta):
             required: 入力値が必須かどうか
             pre_fill_value: 事前に入力する値
         """
-        super().__init__()
+        super().__init__(label=label)
         self.parent_view = parent_view
         self.title = title
         self.func = func
         self.style = style
-        self.value = value
         self.label = label
         self.placeholder = placeholder
         self.min_length = min_length
@@ -195,7 +191,7 @@ class InputText(BaseInputText, metaclass=ABCMeta):
         self.func = func
         return self
 
-    def set_style(self, style: InputTextStyle):
+    def set_style(self, style: TextStyle):
         """
         入力値のスタイルを設定する
         Args:
@@ -266,18 +262,3 @@ class InputText(BaseInputText, metaclass=ABCMeta):
         """
         self.parent_view = parent_view
         return self
-
-    def label_patch(self, value: str):
-        if not isinstance(value, str):
-            raise TypeError(f"label should be None or str not {value.__class__}")
-        self._underlying.label = value
-
-    def required_patch(self, value: Optional[bool]):
-        if not isinstance(value, bool):
-            raise TypeError(f"required must be bool not {value.__class__}")  # type: ignore
-        self._underlying.required = bool(value)
-
-    BaseInputText.label = property(BaseInputText.label.fget, label_patch)
-    BaseInputText.required = property(BaseInputText.required.fget, required_patch)
-
-
