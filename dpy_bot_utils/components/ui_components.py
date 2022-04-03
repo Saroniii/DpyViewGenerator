@@ -251,7 +251,7 @@ class TextInput(BaseTextInput):
         Args:
             value: 入力値
         """
-        self._value = value
+        self.default = value
         return self
 
     def set_parent_view(self, parent_view: View):
