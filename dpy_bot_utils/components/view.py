@@ -9,6 +9,7 @@ from discord.ui.button import Button as BaseButton
 from discord.ui.select import Select as BaseSelect, SelectOption as BaseSelectOption
 from discord.ui.view import View
 from discord import ButtonStyle as BaseButtonStyle
+from .ui_components import Modal
 
 
 class ViewGenerator(View):
