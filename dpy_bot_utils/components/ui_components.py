@@ -170,7 +170,7 @@ class TextInput(BaseTextInput):
         self.min_length = min_length
         self.max_length = max_length
         self.required = required
-        self.value = pre_fill_value
+        self._value = pre_fill_value
         self.set_parent_view = None
 
     def set_title(self, title: str):
