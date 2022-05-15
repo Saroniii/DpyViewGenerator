@@ -235,7 +235,6 @@ class ViewGenerator(View):
         Viewにあるコンポーネントを全て削除する
         :param sync_message: Viewを表示するメッセージのコンポーネントを自動で削除するよう編集するかどうか
         """
-        self.children = []
         if self.message and sync_message:
             await self.message.edit(view=None)
 
@@ -248,7 +247,6 @@ class ViewGenerator(View):
         Viewにあるコンポーネントを全て削除してメッセージも削除する
         :param sync_message: Viewを表示するメッセージのコンポーネントを自動で削除するよう編集するかどうか
         """
-        self.children = []
         if self.message and sync_message:
             await self.message.delete()
 
