@@ -139,19 +139,20 @@ class ViewGenerator(View):
 
         for i in components:
             i.set_parent_view(self)
-            if check_generated_custom_id(i.custom_id) and self.custom_id_prefix:
-                if type(i) == Button:
-                    if not i.style == ButtonStyle.link:
+            if not i.url:
+                if check_generated_custom_id(i.custom_id) and self.custom_id_prefix:
+                    if type(i) == Button:
+                        if not i.style == ButtonStyle.link:
+                            i.custom_id = f"{self.custom_id_prefix}-{i.custom_id}"
+                        else:
+                            i.custom_id = None
+
+                    if type(i) == Select:
                         i.custom_id = f"{self.custom_id_prefix}-{i.custom_id}"
-                    else:
-                        i.custom_id = None
 
-                if type(i) == Select:
-                    i.custom_id = f"{self.custom_id_prefix}-{i.custom_id}"
-
-            elif not check_generated_custom_id(i.custom_id) and self.custom_id_prefix:
-                if not i.custom_id.startswith(self.custom_id_prefix):
-                    i.custom_id = f"{self.custom_id_prefix}-{i.custom_id}"
+                elif not check_generated_custom_id(i.custom_id) and self.custom_id_prefix:
+                    if not i.custom_id.startswith(self.custom_id_prefix):
+                        i.custom_id = f"{self.custom_id_prefix}-{i.custom_id}"
 
             self.add_item(item=i)
 
