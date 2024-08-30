@@ -211,7 +211,7 @@ class ViewGenerator(View):
             await self.message.edit(view=self)
 
         elif self.interaction and sync_message:
-            await self.interaction.edit_original_message(view=self)
+            await self.interaction.edit_original_response(view=self)
 
         return self
 
@@ -227,7 +227,7 @@ class ViewGenerator(View):
             await self.message.edit(view=self)
 
         elif self.interaction and sync_message:
-            await self.interaction.edit_original_message(view=self)
+            await self.interaction.edit_original_response(view=self)
         return self
 
     async def close_view(self, sync_message: bool = True):
@@ -239,7 +239,7 @@ class ViewGenerator(View):
             await self.message.edit(view=None)
 
         elif self.interaction and sync_message:
-            await self.interaction.edit_original_message(view=None)
+            await self.interaction.edit_original_response(view=None)
         return self
 
     async def close_view_and_delete(self, sync_message: bool = True):
